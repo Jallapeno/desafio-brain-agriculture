@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDirs": ["src", "tests"],
+    "target": "ES2021",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true, // forca a importacao com o exato nome do arquivo
+    "sourceMap": true, // cria um arquivo de map do javascript dentro da pasta biuld
+    "moduleResolution": "node", // permite a importacao apontando apenas para a pasta
+    "module": "CommonJS",
+    "esModuleInterop": true, // resolve compatibilidade entre modulos
+    "baseUrl": "src",
+    "paths": {
+        "@/*" : ["*"],
+        "@/tests/*" : ["../tests/*"]
+    },
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/app.js",
+    "src/**/*.graphql",
+    "./**/*.graphql"
+, "src/index.ts"  ],
+  "exclude": ["node_modules"]
+}

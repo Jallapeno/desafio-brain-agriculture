@@ -1,0 +1,35 @@
+type Query {
+  producers: [Producer!]
+  producer(id: Int!): Producer
+}
+
+type Mutation {
+  createProducer(input: ProducerInput!): Producer
+  updateProducer(id: Int!, input: ProducerInput!): Producer
+  deleteProducer(id: Int!): Producer
+}
+
+type Producer {
+  id: Int!
+  cpfCnpj: String!
+  name: String!
+  farmName: String!
+  city: String!
+  state: String!
+  totalArea: Float!
+  arableArea: Float!
+  vegetationArea: Float!
+  crops: [String!]
+}
+
+input ProducerInput {
+  cpfCnpj: String!
+  name: String!
+  farmName: String!
+  city: String!
+  state: String!
+  totalArea: Float!
+  arableArea: Float!
+  vegetationArea: Float!
+  crops: [String!]
+}
