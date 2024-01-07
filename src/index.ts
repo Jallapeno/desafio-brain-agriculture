@@ -1,21 +1,19 @@
-import { fileURLToPath } from 'url';
-import { readFileSync } from 'fs';
-import path, { join, dirname } from 'path';
-// import path from 'path';
-import { makeExecutableSchema } from '@graphql-tools/schema'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
-import { resolvers } from './graphql/resolvers';
+import { resolvers } from './graphql/resolvers'
 
-import { startApolloServer } from './app';
+import { startApolloServer } from './app'
 
-// const __filename = fileURLToPath(import.meta.url);
-// console.log(__filename);
+const loadGraphQLFile = (filename): any => readFileSync(join('./src', filename), 'utf-8')
 
-// const teste = dirname(fileName);
+const typeDefs = loadGraphQLFile('./graphql/Schema.graphql')
 
-const loadGraphQLFile = (filename: any) => readFileSync(join('./src', filename), 'utf-8');
+async function runServer (): Promise<void> {
+  await startApolloServer({ typeDefs, resolvers })
+}
 
-const typeDefs = [ loadGraphQLFile('./graphql/Schema.graphql') ].join('\n')
-const schema = makeExecutableSchema({ typeDefs });
-
-startApolloServer(schema, resolvers)
+runServer().catch((error) => {
+  console.error('Error starting the server:', error)
+  process.exit(1)
+})

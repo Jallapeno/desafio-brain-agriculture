@@ -15,13 +15,14 @@
         "@/tests/*" : ["../tests/*"]
     },
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "strict": false
   },
   "include": [
     "src/**/*.ts",
     "src/app.js",
     "src/**/*.graphql",
-    "./**/*.graphql"
-, "src/index.ts"  ],
-  "exclude": ["node_modules"]
+    "./**/*.graphql",
+    "src/index.ts"
+  ]
 }
