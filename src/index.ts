@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-import { resolvers } from './graphql/resolvers'
+import { resolvers } from './graphql/producerResolvers'
 
 import { startApolloServer } from './app'
 
