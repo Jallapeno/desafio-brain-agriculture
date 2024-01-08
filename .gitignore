@@ -3,3 +3,4 @@ dist
 .env
 .husky
 postgres-data
+coverage
