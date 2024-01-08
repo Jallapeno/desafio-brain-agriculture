@@ -6,7 +6,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
-    "start": "npm run build && node ./dist/index.js",
+    "start": "npm run build && nodemon ./dist/index.js",
+    "dev": "nodemon ./src/index.ts",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "husky install"
@@ -40,6 +41,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
+    "nodemon": "^3.0.2",
     "typescript": "^5.0.3"
   },
   "engines": {

@@ -23,11 +23,17 @@ export async function startApolloServer ({ typeDefs, resolvers }: StartApolloSer
     cache: 'bounded',
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageLocalDefault({ embed: true })]
+      ApolloServerPluginLandingPageLocalDefault({ embed: true })
+    ]
   })
 
   await server.start()
   server.applyMiddleware({ app })
+
+  app.use((err, req, res, next) => {
+    console.error('Erro HTTP:', err)
+    res.status(500).send('Intern Server Error')
+  })
 
   await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve))
 
