@@ -37,6 +37,9 @@ describe('ProducerCreateService', () => {
       data: producerCreateData
     })
 
+    // checks if the create function is called only once
+    expect(prismaMock.producer.create).toHaveBeenCalledTimes(1)
+
     // Check whether the service result is as expected
     expect(result).toEqual({ ...producerCreateData, id: 1 })
   })
