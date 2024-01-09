@@ -1,3 +1,4 @@
+import { ProducerCreateError } from '@/domain/errors'
 import { type ProducerCreate } from '@/domain/features'
 import { PrismaClient } from '@prisma/client'
 
@@ -98,6 +99,41 @@ describe('ProducerCreateService', () => {
       arableArea: 100,
       vegetationArea: 100,
       crops: ['any_crop', 'any_crop2', 'any_crop3']
+    })
+  })
+
+  it('should handle error when creating a new producer', async () => {
+    // Mock to simulate an error when calling Prisma's create method
+    jest.spyOn(prismaMock.producer, 'create').mockRejectedValue(new ProducerCreateError())
+
+    // Expect the call to perform to result in an error
+    await expect(
+      sut.perform({
+        cpfCnpj: 'any_cpf',
+        name: 'any_name',
+        farmName: 'any_farmname',
+        city: 'any_city',
+        state: 'any_state',
+        totalArea: 100,
+        arableArea: 100,
+        vegetationArea: 100,
+        crops: ['any_crop', 'any_crop2', 'any_crop3']
+      })
+    ).rejects.toThrow('Error to create new producer')
+
+    // Check if Prisma's create method was called correctly
+    expect(prismaMock.producer.create).toHaveBeenCalledWith({
+      data: {
+        cpfCnpj: 'any_cpf',
+        name: 'any_name',
+        farmName: 'any_farmname',
+        city: 'any_city',
+        state: 'any_state',
+        totalArea: 100,
+        arableArea: 100,
+        vegetationArea: 100,
+        crops: ['any_crop', 'any_crop2', 'any_crop3']
+      }
     })
   })
 })
