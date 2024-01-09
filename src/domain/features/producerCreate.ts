@@ -5,7 +5,7 @@ export interface ProducerCreate {
   perform: (params: ProducerCreate.Params) => Promise<ProducerCreate.Result>
 }
 
-namespace ProducerCreate {
+export namespace ProducerCreate {
   export type Params = {
     cpfCnpj: string
     name: string
