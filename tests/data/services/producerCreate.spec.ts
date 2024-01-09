@@ -35,6 +35,17 @@ class ProducerCreateService {
 describe('ProducerCreateService', () => {
   let sut: ProducerCreateService
   let prismaMock: PrismaClient
+  const producerCreateData = {
+    cpfCnpj: 'any_cpf',
+    name: 'any_name',
+    farmName: 'any_farmname',
+    city: 'any_city',
+    state: 'any_state',
+    totalArea: 100,
+    arableArea: 100,
+    vegetationArea: 100,
+    crops: ['any_crop', 'any_crop2', 'any_crop3']
+  }
 
   beforeEach(() => {
     prismaMock = new PrismaClient()
@@ -47,59 +58,17 @@ describe('ProducerCreateService', () => {
 
   it('should call ProducerCreateService with corrects params to create a new producer in the database', async () => {
     // Mock to simulate Prisma's create method
-    jest.spyOn(prismaMock.producer, 'create').mockResolvedValue({
-      id: 1,
-      cpfCnpj: 'any_cpf',
-      name: 'any_name',
-      farmName: 'any_farmname',
-      city: 'any_city',
-      state: 'any_state',
-      totalArea: 100,
-      arableArea: 100,
-      vegetationArea: 100,
-      crops: ['any_crop', 'any_crop2', 'any_crop3']
-    })
+    jest.spyOn(prismaMock.producer, 'create').mockResolvedValue({ ...producerCreateData, id: 1 })
 
-    const result = await sut.perform({
-      cpfCnpj: 'any_cpf',
-      name: 'any_name',
-      farmName: 'any_farmname',
-      city: 'any_city',
-      state: 'any_state',
-      totalArea: 100,
-      arableArea: 100,
-      vegetationArea: 100,
-      crops: ['any_crop', 'any_crop2', 'any_crop3']
-    })
+    const result = await sut.perform(producerCreateData)
 
     // Check if Prisma's create method was called correctly
     expect(prismaMock.producer.create).toHaveBeenCalledWith({
-      data: {
-        cpfCnpj: 'any_cpf',
-        name: 'any_name',
-        farmName: 'any_farmname',
-        city: 'any_city',
-        state: 'any_state',
-        totalArea: 100,
-        arableArea: 100,
-        vegetationArea: 100,
-        crops: ['any_crop', 'any_crop2', 'any_crop3']
-      }
+      data: producerCreateData
     })
 
     // Check whether the service result is as expected
-    expect(result).toEqual({
-      id: 1,
-      cpfCnpj: 'any_cpf',
-      name: 'any_name',
-      farmName: 'any_farmname',
-      city: 'any_city',
-      state: 'any_state',
-      totalArea: 100,
-      arableArea: 100,
-      vegetationArea: 100,
-      crops: ['any_crop', 'any_crop2', 'any_crop3']
-    })
+    expect(result).toEqual({ ...producerCreateData, id: 1 })
   })
 
   it('should handle error when creating a new producer', async () => {
@@ -108,32 +77,12 @@ describe('ProducerCreateService', () => {
 
     // Expect the call to perform to result in an error
     await expect(
-      sut.perform({
-        cpfCnpj: 'any_cpf',
-        name: 'any_name',
-        farmName: 'any_farmname',
-        city: 'any_city',
-        state: 'any_state',
-        totalArea: 100,
-        arableArea: 100,
-        vegetationArea: 100,
-        crops: ['any_crop', 'any_crop2', 'any_crop3']
-      })
+      sut.perform(producerCreateData)
     ).rejects.toThrow('Error to create new producer')
 
     // Check if Prisma's create method was called correctly
     expect(prismaMock.producer.create).toHaveBeenCalledWith({
-      data: {
-        cpfCnpj: 'any_cpf',
-        name: 'any_name',
-        farmName: 'any_farmname',
-        city: 'any_city',
-        state: 'any_state',
-        totalArea: 100,
-        arableArea: 100,
-        vegetationArea: 100,
-        crops: ['any_crop', 'any_crop2', 'any_crop3']
-      }
+      data: producerCreateData
     })
   })
 })
