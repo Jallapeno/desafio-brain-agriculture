@@ -1,15 +1,10 @@
 import { type ProducerUpdate } from '@/domain/features'
-import { type PrismaClient } from '@prisma/client'
+import { type ProducerUpdateRepository } from '@/data/contracts/repositories'
 
 export class ProducerUpdateService {
-  constructor (private readonly prisma: PrismaClient) { }
+  constructor (private readonly producerUpdateRepository: ProducerUpdateRepository) { }
 
   async perform (id: number, params: ProducerUpdate.Params): Promise<ProducerUpdate.Result> {
-    try {
-      const result = await this.prisma.producer.update({ where: { id }, data: params })
-      return result
-    } finally {
-      await this.prisma.$disconnect()
-    }
+    return await this.producerUpdateRepository.perform(id, params)
   }
 }
