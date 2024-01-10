@@ -36,7 +36,7 @@ describe('ProducerListService', () => {
     expect(result).toEqual([producerData])
   })
 
-  it('should handle error when list all producers', async () => {
+  it('should handle error when ProducerListService calls ProducerListRepository to list all producers', async () => {
     // Mock to simulate an error when calling Prisma's create method
     jest.spyOn(producerListRepository, 'perform').mockRejectedValue(new ProducerListError())
 

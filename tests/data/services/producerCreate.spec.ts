@@ -1,10 +1,11 @@
 import { ProducerCreateError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerCreateService } from '@/data/services'
+import { mock, type MockProxy } from 'jest-mock-extended'
+import { type ProducerCreateRepository } from '@/data/contracts/repositories'
 
 describe('ProducerCreateService', () => {
   let sut: ProducerCreateService
-  let prismaMock: PrismaClient
+  let producerCreateRepository: MockProxy<ProducerCreateRepository>
   const producerCreateData = {
     cpfCnpj: 'any_cpf',
     name: 'any_name',
@@ -18,35 +19,29 @@ describe('ProducerCreateService', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerCreateService(prismaMock)
+    producerCreateRepository = mock()
+    sut = new ProducerCreateService(producerCreateRepository)
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerCreateService with corrects params to create a new producer in the database', async () => {
+  it('should call ProducerCreateService when ProducerCreateRepository returns data', async () => {
     // Mock to simulate Prisma's create method
-    jest.spyOn(prismaMock.producer, 'create').mockResolvedValue({ ...producerCreateData, id: 1 })
+    jest.spyOn(producerCreateRepository, 'perform').mockResolvedValue({ ...producerCreateData, id: 1 })
 
     const result = await sut.perform(producerCreateData)
 
     // Check if Prisma's create method was called correctly
-    expect(prismaMock.producer.create).toHaveBeenCalledWith({
-      data: producerCreateData
-    })
+    expect(producerCreateRepository.perform).toHaveBeenCalledWith(producerCreateData)
 
     // checks if the create function is called only once
-    expect(prismaMock.producer.create).toHaveBeenCalledTimes(1)
+    expect(producerCreateRepository.perform).toHaveBeenCalledTimes(1)
 
     // Check whether the service result is as expected
     expect(result).toEqual({ ...producerCreateData, id: 1 })
   })
 
-  it('should handle error when creating a new producer', async () => {
+  it('should handle error when ProducerCreateService calls ProducerCreateRepository to create a new producer', async () => {
     // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(prismaMock.producer, 'create').mockRejectedValue(new ProducerCreateError())
+    jest.spyOn(producerCreateRepository, 'perform').mockRejectedValue(new ProducerCreateError())
 
     // Expect the call to perform to result in an error
     await expect(
@@ -54,8 +49,6 @@ describe('ProducerCreateService', () => {
     ).rejects.toThrow('Error to create new producer')
 
     // Check if Prisma's create method was called correctly
-    expect(prismaMock.producer.create).toHaveBeenCalledWith({
-      data: producerCreateData
-    })
+    expect(producerCreateRepository.perform).toHaveBeenCalledWith(producerCreateData)
   })
 })
