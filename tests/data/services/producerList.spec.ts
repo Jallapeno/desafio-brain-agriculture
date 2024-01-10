@@ -1,11 +1,11 @@
 import { ProducerListError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerListService } from '@/data/services'
+import { mock, type MockProxy } from 'jest-mock-extended'
+import { type ProducerListRepository } from '../contracts/repositories'
 
 describe('ProducerListService', () => {
   let sut: ProducerListService
-  let prismaMock: PrismaClient
-
+  let producerListRepository: MockProxy<ProducerListRepository>
   const producerData = {
     id: 1,
     cpfCnpj: 'any_cpf',
@@ -20,29 +20,25 @@ describe('ProducerListService', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerListService(prismaMock)
+    producerListRepository = mock()
+    sut = new ProducerListService(producerListRepository)
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerListService to list all producers', async () => {
-    jest.spyOn(prismaMock.producer, 'findMany').mockResolvedValue([producerData])
+  it('should call ProducerListService when ProducerListRepository returns data', async () => {
+    jest.spyOn(producerListRepository, 'perform').mockResolvedValue([producerData])
 
     const result = await sut.perform()
 
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
+    expect(producerListRepository.perform).toHaveBeenCalledWith()
 
-    expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
+    expect(producerListRepository.perform).toHaveBeenCalledTimes(1)
 
     expect(result).toEqual([producerData])
   })
 
   it('should handle error when list all producers', async () => {
     // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerListError())
+    jest.spyOn(producerListRepository, 'perform').mockRejectedValue(new ProducerListError())
 
     // Expect the call to perform to result in an error
     await expect(
@@ -50,6 +46,6 @@ describe('ProducerListService', () => {
     ).rejects.toThrow('Error to list all producers')
 
     // Check if Prisma's create method was called correctly
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
+    expect(producerListRepository.perform).toHaveBeenCalledWith()
   })
 })

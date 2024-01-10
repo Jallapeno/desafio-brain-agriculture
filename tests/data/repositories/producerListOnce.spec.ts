@@ -2,7 +2,7 @@ import { ProducerListOnceError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 import { ProducerListOnceRepository } from '@/data/contracts/repositories'
 
-describe('ListUniqueProducerRepository', () => {
+describe('ProducerListOnceRepository', () => {
   let sut: ProducerListOnceRepository
   let prismaMock: PrismaClient
   const producerData = {
@@ -27,23 +27,23 @@ describe('ListUniqueProducerRepository', () => {
     await prismaMock.$disconnect()
   })
 
-  it('should call ProducerListOnceRepository returns data', async () => {
+  it('should call ProducerListOnceRepository when Prisma returns data', async () => {
     jest.spyOn(prismaMock.producer, 'findUnique').mockResolvedValue(producerData)
 
     const result = await sut.perform({ id: 1 })
 
-    // Check if Prisma's create method was called correctly
+    // Check if Prisma's findUnique method was called correctly
     expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })
 
-    // checks if the create function is called only once
+    // checks if the findUnique function is called only once
     expect(prismaMock.producer.findUnique).toHaveBeenCalledTimes(1)
 
-    // Check whether the service result is as expected
+    // Check whether the repository result is as expected
     expect(result).toEqual(producerData)
   })
 
-  it('should handle error when list a producer by id', async () => {
-    // Mock to simulate an error when calling Prisma's create method
+  it('Should handle ProducerListOnceRepository error when Prisma try list a producer by id', async () => {
+    // Mock to simulate an error when calling Prisma's findUnique method
     jest.spyOn(prismaMock.producer, 'findUnique').mockRejectedValue(new ProducerListOnceError())
 
     // Expect the call to perform to result in an error

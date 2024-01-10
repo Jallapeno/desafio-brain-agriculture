@@ -1,6 +1,5 @@
 import { ProducerListOnceError } from '@/domain/errors'
 import { ProducerListOnceService } from '@/data/services'
-// import { type ProducerListOnce } from '@/domain/features'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { type ProducerListOnceRepository } from '@/data/contracts/repositories'
 
@@ -39,7 +38,7 @@ describe('ProducerListOnceService', () => {
     expect(result).toEqual(producerData)
   })
 
-  it('should handle error when list a producer by id', async () => {
+  it('should handle error when ProducerListOnceService try calls ProducerListOnceRepository', async () => {
     // Mock to simulate an error when calling Prisma's create method
     jest.spyOn(producerListOnceRepository, 'perform').mockRejectedValue(new ProducerListOnceError())
 
