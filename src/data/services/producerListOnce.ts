@@ -2,11 +2,7 @@ import { type ProducerListOnce } from '@/domain/features'
 import { type PrismaClient } from '@prisma/client'
 
 export class ProducerListOnceService {
-  private readonly prisma: PrismaClient
-
-  constructor (prisma: PrismaClient) {
-    this.prisma = prisma
-  }
+  constructor (private readonly prisma: PrismaClient) { }
 
   async perform (params: ProducerListOnce.Params): Promise<ProducerListOnce.Result | null> {
     try {

@@ -2,11 +2,7 @@ import { type ProducerCreate } from '@/domain/features'
 import { type PrismaClient } from '@prisma/client'
 
 export class ProducerCreateService {
-  private readonly prisma: PrismaClient
-
-  constructor (prisma: PrismaClient) {
-    this.prisma = prisma
-  }
+  constructor (private readonly prisma: PrismaClient) { }
 
   async perform (params: ProducerCreate.Params): Promise<ProducerCreate.Result> {
     try {

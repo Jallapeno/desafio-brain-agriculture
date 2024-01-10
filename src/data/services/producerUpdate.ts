@@ -2,11 +2,7 @@ import { type ProducerUpdate } from '@/domain/features'
 import { type PrismaClient } from '@prisma/client'
 
 export class ProducerUpdateService {
-  private readonly prisma: PrismaClient
-
-  constructor (prisma: PrismaClient) {
-    this.prisma = prisma
-  }
+  constructor (private readonly prisma: PrismaClient) { }
 
   async perform (id: number, params: ProducerUpdate.Params): Promise<ProducerUpdate.Result> {
     try {
