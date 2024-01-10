@@ -29,7 +29,7 @@ describe('ProducerListService', () => {
   })
 
   it('should call ProducerListService to list all producers', async () => {
-    jest.spyOn(prismaMock.producer, 'findMany').mockResolvedValueOnce([producerData])
+    jest.spyOn(prismaMock.producer, 'findMany').mockResolvedValue([producerData])
 
     const result = await sut.perform()
 
