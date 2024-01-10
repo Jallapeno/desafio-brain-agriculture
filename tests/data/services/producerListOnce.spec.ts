@@ -1,11 +1,12 @@
 import { ProducerListOnceError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerListOnceService } from '@/data/services'
+// import { type ProducerListOnce } from '@/domain/features'
+import { mock, type MockProxy } from 'jest-mock-extended'
+import { type ProducerListOnceRepository } from '@/data/contracts/repositories'
 
 describe('ProducerListOnceService', () => {
   let sut: ProducerListOnceService
-  let prismaMock: PrismaClient
-
+  let producerListOnceRepository: MockProxy<ProducerListOnceRepository>
   const producerData = {
     id: 1,
     cpfCnpj: 'any_cpf',
@@ -20,36 +21,34 @@ describe('ProducerListOnceService', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerListOnceService(prismaMock)
+    producerListOnceRepository = mock()
+    sut = new ProducerListOnceService(
+      producerListOnceRepository
+    )
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerListOnceService to list a producer by id', async () => {
-    jest.spyOn(prismaMock.producer, 'findUnique').mockResolvedValue(producerData)
+  it('should calls ProducerListOnceService when ProducerListOnceRepository returns data', async () => {
+    jest.spyOn(producerListOnceRepository, 'perform').mockResolvedValue(producerData)
 
     const result = await sut.perform({ id: 1 })
 
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })
+    expect(producerListOnceRepository.perform).toHaveBeenCalledWith({ id: 1 })
 
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledTimes(1)
+    expect(producerListOnceRepository.perform).toHaveBeenCalledTimes(1)
 
     expect(result).toEqual(producerData)
   })
 
   it('should handle error when list a producer by id', async () => {
     // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(prismaMock.producer, 'findUnique').mockRejectedValue(new ProducerListOnceError())
+    jest.spyOn(producerListOnceRepository, 'perform').mockRejectedValue(new ProducerListOnceError())
 
     // Expect the call to perform to result in an error
     await expect(
       sut.perform({ id: 1 })
     ).rejects.toThrow('Error to list producer')
 
-    // Check if Prisma's create method was called correctly
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })
+    // Check if producerListOnceRepository was called correctly
+    expect(producerListOnceRepository.perform).toHaveBeenCalledWith({ id: 1 })
   })
 })

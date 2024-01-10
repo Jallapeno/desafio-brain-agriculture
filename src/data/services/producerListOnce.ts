@@ -1,15 +1,12 @@
 import { type ProducerListOnce } from '@/domain/features'
-import { type PrismaClient } from '@prisma/client'
+import { type ProducerListOnceRepository } from '@/data/contracts/repositories'
 
 export class ProducerListOnceService {
-  constructor (private readonly prisma: PrismaClient) { }
+  constructor (
+    private readonly producerListOnceRepository: ProducerListOnceRepository
+  ) { }
 
   async perform (params: ProducerListOnce.Params): Promise<ProducerListOnce.Result | null> {
-    try {
-      const result = await this.prisma.producer.findUnique({ where: { id: params.id } })
-      return result
-    } finally {
-      await this.prisma.$disconnect()
-    }
+    return await this.producerListOnceRepository.perform(params)
   }
 }
