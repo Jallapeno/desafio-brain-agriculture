@@ -1,23 +1,6 @@
 import { ProducerListOnceError } from '@/domain/errors'
-import { type ProducerListOnce } from '@/domain/features'
 import { PrismaClient } from '@prisma/client'
-
-class ProducerListOnceService {
-  private readonly prisma: PrismaClient
-
-  constructor (prisma: PrismaClient) {
-    this.prisma = prisma
-  }
-
-  async perform (params: ProducerListOnce.Params): Promise<ProducerListOnce.Result | null> {
-    try {
-      const result = await this.prisma.producer.findUnique({ where: { id: params.id } })
-      return result
-    } finally {
-      await this.prisma.$disconnect()
-    }
-  }
-}
+import { ProducerListOnceService } from '@/data/services'
 
 describe('ProducerListOnceService', () => {
   let sut: ProducerListOnceService
