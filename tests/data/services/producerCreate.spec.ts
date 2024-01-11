@@ -12,7 +12,7 @@ describe('ProducerCreateService', () => {
     farmName: 'any_farmname',
     city: 'any_city',
     state: 'any_state',
-    totalArea: 100,
+    totalArea: 200,
     arableArea: 100,
     vegetationArea: 100,
     crops: ['any_crop', 'any_crop2', 'any_crop3']
@@ -50,5 +50,23 @@ describe('ProducerCreateService', () => {
 
     // Check if Prisma's create method was called correctly
     expect(producerCreateRepository.perform).toHaveBeenCalledWith(producerCreateData)
+  })
+
+  it('should handle error when total area is exceeded', async () => {
+    // Simulate a scenario where the sum of arableArea and vegetationArea is greater than totalArea
+    const paramsWithExceededArea = {
+      ...producerCreateData,
+      arableArea: 150,
+      vegetationArea: 100
+    }
+
+    // No need to spy on the real call to producerCreateRepository.perform,
+    // since we expect the if logic to return a ProducerCreateError
+    // without calling the repository
+
+    // Expect the call to perform to result in an error
+    await expect(
+      sut.perform(paramsWithExceededArea)
+    ).resolves.toEqual(new ProducerCreateError())
   })
 })

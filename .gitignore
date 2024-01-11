@@ -3,3 +3,4 @@ dist
 .env
 postgres-data
 coverage
+.vscode

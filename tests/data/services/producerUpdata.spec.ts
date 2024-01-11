@@ -13,7 +13,7 @@ describe('ProducerUpdateService', () => {
     farmName: 'any_farmname',
     city: 'any_city',
     state: 'any_state',
-    totalArea: 100,
+    totalArea: 200,
     arableArea: 100,
     vegetationArea: 100,
     crops: ['any_crop', 'any_crop2', 'any_crop3']
@@ -47,5 +47,19 @@ describe('ProducerUpdateService', () => {
     ).rejects.toThrow('Error to update a producer')
 
     expect(producerUpdateRepository.perform).toHaveBeenCalledWith(id, rest)
+  })
+
+  it('should handle error when total area is exceeded', async () => {
+    const { id, ...rest } = producerUpdateData
+
+    const paramsWithExceededArea = {
+      ...rest,
+      arableArea: 150,
+      vegetationArea: 100
+    }
+
+    await expect(
+      sut.perform(id, paramsWithExceededArea)
+    ).resolves.toEqual(new ProducerUpdateError())
   })
 })
