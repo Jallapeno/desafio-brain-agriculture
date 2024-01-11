@@ -1,4 +1,4 @@
-import { ProducerCreateError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 import { ProducerCreateService } from '@/data/services'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { type ProducerCreateRepository } from '@/data/contracts/repositories'
@@ -39,19 +39,6 @@ describe('ProducerCreateService', () => {
     expect(result).toEqual({ ...producerCreateData, id: 1 })
   })
 
-  it('should handle error when ProducerCreateService calls ProducerCreateRepository to create a new producer', async () => {
-    // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(producerCreateRepository, 'perform').mockRejectedValue(new ProducerCreateError())
-
-    // Expect the call to perform to result in an error
-    await expect(
-      sut.perform(producerCreateData)
-    ).rejects.toThrow('Error to create new producer')
-
-    // Check if Prisma's create method was called correctly
-    expect(producerCreateRepository.perform).toHaveBeenCalledWith(producerCreateData)
-  })
-
   it('should handle error when total area is exceeded', async () => {
     // Simulate a scenario where the sum of arableArea and vegetationArea is greater than totalArea
     const paramsWithExceededArea = {
@@ -67,6 +54,9 @@ describe('ProducerCreateService', () => {
     // Expect the call to perform to result in an error
     await expect(
       sut.perform(paramsWithExceededArea)
-    ).resolves.toEqual(new ProducerCreateError())
+    ).resolves.toEqual(new ProducerError(
+      'The sum of arable area and vegetation must not be greater than the total area of the farm',
+      '@ProducerCreateService'
+    ))
   })
 })

@@ -7,7 +7,7 @@
     "prisma:migrate": "prisma migrate dev",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "start": "npm run build && node ./dist/main/api",
-    "dev": "nodemon ./src/index.ts",
+    "dev": "nodemon ./src/main/api/index.ts",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "husky install",

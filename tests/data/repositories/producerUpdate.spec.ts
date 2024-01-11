@@ -1,4 +1,4 @@
-import { ProducerUpdateError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 import { ProducerUpdateRepository } from '@/data/contracts/repositories'
 
@@ -46,7 +46,10 @@ describe('ProducerUpdateRepository', () => {
   })
 
   it('should handle ProducerUpdateRepository error when Prisma try update a producer by id', async () => {
-    jest.spyOn(prismaMock.producer, 'update').mockRejectedValue(new ProducerUpdateError())
+    jest.spyOn(prismaMock.producer, 'update').mockRejectedValue(new ProducerError(
+      'Error to update a producer',
+      '@ProducerCreateRepository'
+    ))
 
     const { id, ...rest } = producerUpdateData
 

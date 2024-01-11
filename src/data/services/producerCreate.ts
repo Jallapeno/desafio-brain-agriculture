@@ -1,6 +1,6 @@
 import { type ProducerCreate } from '@/domain/features'
 import { type ProducerCreateRepository } from '@/data/contracts/repositories'
-import { ProducerCreateError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 
 export class ProducerCreateService {
   constructor (private readonly producerCreateRepository: ProducerCreateRepository) { }
@@ -9,6 +9,9 @@ export class ProducerCreateService {
     if (params.arableArea + params.vegetationArea <= params.totalArea) {
       return await this.producerCreateRepository.perform(params)
     }
-    return new ProducerCreateError()
+    return new ProducerError(
+      'The sum of arable area and vegetation must not be greater than the total area of the farm',
+      '@ProducerCreateService'
+    )
   }
 }

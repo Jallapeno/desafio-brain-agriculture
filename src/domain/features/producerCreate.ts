@@ -1,5 +1,5 @@
 import { type Producer } from '@prisma/client'
-import { type ProducerCreateError } from '@/domain/errors'
+import { type ProducerError } from '@/domain/errors'
 
 export interface ProducerCreate {
   perform: (params: ProducerCreate.Params) => Promise<ProducerCreate.Result>
@@ -18,5 +18,5 @@ export namespace ProducerCreate {
     crops: string[]
   }
 
-  export type Result = Producer | ProducerCreateError
+  export type Result = Producer | ProducerError
 }

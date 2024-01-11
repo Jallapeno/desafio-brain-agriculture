@@ -1,4 +1,4 @@
-import { ProducerCreateError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 import { ProducerCreateRepository } from '@/data/contracts/repositories'
 
@@ -46,12 +46,15 @@ describe('ProducerCreateRepository', () => {
 
   it('should handle ProducerCreateRepository error when Prisma try create a new producer in DB', async () => {
     // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(prismaMock.producer, 'create').mockRejectedValue(new ProducerCreateError())
+    jest.spyOn(prismaMock.producer, 'create').mockRejectedValue(new ProducerError(
+      'Error to create a new producer',
+      '@ProducerCreateRepository'
+    ))
 
     // Expect the call to perform to result in an error
     await expect(
       sut.perform(producerCreateData)
-    ).rejects.toThrow('Error to create new producer')
+    ).rejects.toThrow('Error to create a new producer')
 
     // Check if Prisma's create method was called correctly
     expect(prismaMock.producer.create).toHaveBeenCalledWith({
