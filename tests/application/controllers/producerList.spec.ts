@@ -2,19 +2,7 @@ import { type Request, type Response } from 'express'
 import { type ProducerListService } from '@/data/services'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { ProducerListError } from '@/domain/errors'
-
-class ProducerListCrontroller {
-  constructor (private readonly producerListService: ProducerListService) {}
-
-  async handle (req: Request, res: Response): Promise<void> {
-    try {
-      const result = await this.producerListService.perform()
-      res.status(201).json(result)
-    } catch (error) {
-      res.status(error.statusCode).json({ error: error.message })
-    }
-  }
-}
+import { ProducerListCrontroller } from '@/application/controllers/'
 
 describe('ProducerListCrontroller', () => {
   let sut: ProducerListCrontroller

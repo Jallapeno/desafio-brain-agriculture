@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express'
-import { ProducerCreateController } from '@/application/controllers/producerCreate'
+import { ProducerCreateController } from '@/application/controllers'
 import { type ProducerCreateService } from '@/data/services'
 import { ProducerCreateError } from '@/domain/errors'
 import { mock, type MockProxy } from 'jest-mock-extended'
