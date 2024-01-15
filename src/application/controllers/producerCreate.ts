@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express'
 import { type ProducerCreateService } from '@/data/services'
+import { isValidCpfCnpj } from '@/utils/validators'
 
 export class ProducerCreateController {
   constructor (private readonly producerCreateService: ProducerCreateService) {}
@@ -8,6 +9,10 @@ export class ProducerCreateController {
     const { body } = req
     if (body.arableArea + body.vegetationArea > body.totalArea) {
       res.status(400).json({ error: 'The sum of arable area and vegetation must not be greater than the total area of the farm' })
+      return
+    }
+    if (!isValidCpfCnpj(body.cpfCnpj)) {
+      res.status(400).json({ error: 'Invalid CPF or CNPJ' })
       return
     }
     try {
