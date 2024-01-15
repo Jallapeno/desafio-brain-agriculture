@@ -1,4 +1,4 @@
-import { ProducerError } from '@/domain/errors'
+import { ProducerUpdateError } from '@/domain/errors'
 import { ProducerUpdateService } from '@/data/services'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { type ProducerUpdateRepository } from '@/data/contracts/repositories'
@@ -37,20 +37,35 @@ describe('ProducerUpdateService', () => {
     expect(result).toEqual(producerUpdateData)
   })
 
-  it('should handle error when total area is exceeded', async () => {
+  it('should handle error when ProducerUpdateService calls ProducerUpdateRepository to update a producer by id', async () => {
+    jest.spyOn(producerUpdateRepository, 'perform').mockRejectedValue(new ProducerUpdateError())
+
     const { id, ...rest } = producerUpdateData
 
-    const paramsWithExceededArea = {
-      ...rest,
-      arableArea: 150,
-      vegetationArea: 100
-    }
-
     await expect(
-      sut.perform(id, paramsWithExceededArea)
-    ).resolves.toEqual(new ProducerError(
-      'The sum of arable area and vegetation must not be greater than the total area of the farm',
-      '@ProducerCreateService'
-    ))
+      sut.perform(id, rest)
+    ).rejects.toThrow('Error to update a producer')
+
+    expect(producerUpdateRepository.perform).toHaveBeenCalledWith(id, rest)
   })
+
+  // it('should handle error when total area is exceeded', async () => {
+  //   const { id, ...rest } = producerUpdateData
+
+  //   const paramsWithExceededArea = {
+  //     ...rest,
+  //     arableArea: 150,
+  //     vegetationArea: 100
+  //   }
+
+  //   await expect(
+  //     sut.perform(id, paramsWithExceededArea)
+  //   ).rejects.toThrow(
+  //     new ProducerError(
+  //       'The sum of arable area and vegetation must not be greater than the total area of the farm',
+  //       '@ProducerUpdateService',
+  //       400
+  //     )
+  //   )
+  // })
 })

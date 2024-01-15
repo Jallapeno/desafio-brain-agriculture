@@ -1,6 +1,9 @@
 export class ProducerError extends Error {
-  constructor (message?: string, name?: string) {
-    super(message ?? 'Server Error')
-    this.name = name ?? 'Server Error'
+  statusCode: number
+
+  constructor (message: string = 'Server Error', name: string = 'Server Error', statusCode: number = 500) {
+    super(message)
+    this.name = name
+    this.statusCode = statusCode
   }
 }
