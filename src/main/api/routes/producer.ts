@@ -1,18 +1,21 @@
 import { Router } from 'express'
 import { PrismaClient } from '@prisma/client'
 import {
+  DashboardRepository,
   ProducerCreateRepository,
   ProducerListOnceRepository,
   ProducerListRepository,
   ProducerUpdateRepository
 } from '@/data/contracts/repositories'
 import {
+  DashboardService,
   ProducerCreateService,
   ProducerListOnceService,
   ProducerListService,
   ProducerUpdateService
 } from '@/data/services'
 import {
+  DashboardController,
   ProducerCreateController,
   ProducerListCrontroller,
   ProducerListOnceController,
@@ -21,6 +24,11 @@ import {
 
 export const producerRouter = Router()
 const prisma = new PrismaClient()
+// dashboard
+const dashboardRepository = new DashboardRepository(prisma)
+const dashboardService = new DashboardService(dashboardRepository)
+const dashboardController = new DashboardController(dashboardService)
+producerRouter.get('/producer/dashboard', async (req, res) => dashboardController.handle(req, res))
 // producer create
 const producerCreateRepository = new ProducerCreateRepository(prisma)
 const producerCreateService = new ProducerCreateService(producerCreateRepository)

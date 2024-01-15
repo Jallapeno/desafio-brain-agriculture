@@ -1,7 +1,7 @@
 import { ProducerListError } from '@/domain/errors'
 import { ProducerListService } from '@/data/services'
 import { mock, type MockProxy } from 'jest-mock-extended'
-import { type ProducerListRepository } from '../contracts/repositories'
+import { type ProducerListRepository } from '@/data/contracts/repositories'
 
 describe('ProducerListService', () => {
   let sut: ProducerListService

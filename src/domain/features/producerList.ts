@@ -6,5 +6,5 @@ export interface ProducerList {
 }
 
 export namespace ProducerList {
-  export type Result = Producer[] | ProducerListError
+  export type Result = Producer | ProducerListError
 }

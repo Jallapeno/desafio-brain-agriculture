@@ -6,7 +6,7 @@ export class ProducerListRepository {
     private readonly prisma: PrismaClient
   ) {}
 
-  async perform (): Promise<ProducerList.Result | null> {
+  async perform (): Promise<ProducerList.Result[] | null> {
     try {
       const result = await this.prisma.producer.findMany()
       return result
