@@ -30,7 +30,7 @@ describe('ProducerListOnceRepository', () => {
   it('should call ProducerListOnceRepository when Prisma returns data', async () => {
     jest.spyOn(prismaMock.producer, 'findUnique').mockResolvedValue(producerData)
 
-    const result = await sut.perform({ id: 1 })
+    const result = await sut.perform(1)
 
     // Check if Prisma's findUnique method was called correctly
     expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })

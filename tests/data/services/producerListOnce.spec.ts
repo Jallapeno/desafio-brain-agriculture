@@ -29,9 +29,9 @@ describe('ProducerListOnceService', () => {
   it('should calls ProducerListOnceService when ProducerListOnceRepository returns data', async () => {
     jest.spyOn(producerListOnceRepository, 'perform').mockResolvedValue(producerData)
 
-    const result = await sut.perform({ id: 1 })
+    const result = await sut.perform(1)
 
-    expect(producerListOnceRepository.perform).toHaveBeenCalledWith({ id: 1 })
+    expect(producerListOnceRepository.perform).toHaveBeenCalledWith(1)
 
     expect(producerListOnceRepository.perform).toHaveBeenCalledTimes(1)
 
@@ -44,10 +44,10 @@ describe('ProducerListOnceService', () => {
 
     // Expect the call to perform to result in an error
     await expect(
-      sut.perform({ id: 1 })
+      sut.perform(1)
     ).rejects.toThrow('Error to list producer')
 
     // Check if producerListOnceRepository was called correctly
-    expect(producerListOnceRepository.perform).toHaveBeenCalledWith({ id: 1 })
+    expect(producerListOnceRepository.perform).toHaveBeenCalledWith(1)
   })
 })

@@ -7,9 +7,9 @@ export class ProducerListOnceRepository {
     private readonly prisma: PrismaClient
   ) {}
 
-  async perform (params: ProducerListOnce.Params): Promise<ProducerListOnce.Result | null> {
+  async perform (id: number): Promise<ProducerListOnce.Result | null> {
     try {
-      const result = await this.prisma.producer.findUnique({ where: { id: params.id } })
+      const result = await this.prisma.producer.findUnique({ where: { id } })
       return result
     } finally {
       await this.prisma.$disconnect()
