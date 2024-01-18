@@ -1,0 +1,7 @@
+- Apply factories method to routes to reduce complexity
+- Uncouple Prisma of repositories moving to a own class
+- Remove Prisma instance and Create a fakeDbProvider into tests files
+- Refactor in create and update repositories
+- Create a validation class to validade a sum of arable area and vegetation and refatorin a create (lines 10 - 17) and update (lines 11 - 18) controllers
+- Implements a helpers to validate http returns like NestJS ExceptionFilters
+- Refactor in files where there is no catch errors treatment
