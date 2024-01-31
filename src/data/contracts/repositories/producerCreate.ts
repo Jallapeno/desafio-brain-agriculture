@@ -1,3 +1,4 @@
+import { ProducerError } from '@/domain/errors'
 import { type ProducerCreate } from '@/domain/features'
 import { type PrismaClient } from '@prisma/client'
 
@@ -23,6 +24,8 @@ export class ProducerCreateRepository {
       })
 
       return result
+    } catch (error) {
+      throw new ProducerError('Database connection error', '@ProducerCreateRepository', 500)
     } finally {
       await this.prisma.$disconnect()
     }

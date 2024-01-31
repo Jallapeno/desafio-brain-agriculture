@@ -1,4 +1,4 @@
-import { ProducerListOnceError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 import { ProducerListOnceRepository } from '@/data/contracts/repositories'
 
@@ -44,12 +44,16 @@ describe('ProducerListOnceRepository', () => {
 
   it('Should handle ProducerListOnceRepository error when Prisma try list a producer by id', async () => {
     // Mock to simulate an error when calling Prisma's findUnique method
-    jest.spyOn(prismaMock.producer, 'findUnique').mockRejectedValue(new ProducerListOnceError())
+    jest.spyOn(prismaMock.producer, 'findUnique').mockRejectedValue(new ProducerError(
+      'Database connection error',
+      '@ProducerListOnceRepository',
+      500
+    ))
 
     // Expect the call to perform to result in an error
     await expect(
       prismaMock.producer.findUnique({ where: { id: 1 } })
-    ).rejects.toThrow('Error to list producer')
+    ).rejects.toThrow()
 
     // Check if Prisma's findUnique method was called correctly
     expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })

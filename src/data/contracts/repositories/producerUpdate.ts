@@ -1,3 +1,4 @@
+import { ProducerError } from '@/domain/errors'
 import { type ProducerUpdate } from '@/domain/features'
 import { type PrismaClient } from '@prisma/client'
 
@@ -10,6 +11,8 @@ export class ProducerUpdateRepository {
     try {
       const result = await this.prisma.producer.update({ where: { id }, data: params })
       return result
+    } catch (error) {
+      throw new ProducerError('Database connection error', '@ProducerUpdateRepository', 500)
     } finally {
       await this.prisma.$disconnect()
     }

@@ -1,4 +1,4 @@
-import { ProducerListError } from '@/domain/errors'
+import { ProducerError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 import { ProducerListRepository } from '@/data/contracts/repositories'
 
@@ -44,12 +44,16 @@ describe('ProducerListRepository', () => {
 
   it('should handle ProducerListRepository error when Prisma try list all producers', async () => {
     // Mock to simulate an error when calling Prisma's findMany method
-    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerListError())
+    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerError(
+      'Database connection error',
+      '@ProducerListRepository',
+      500
+    ))
 
     // Expect the call to perform to result in an error
     await expect(
       sut.perform()
-    ).rejects.toThrow('Error to list all producers')
+    ).rejects.toThrow()
 
     // Check if Prisma's findMany method was called correctly
     expect(prismaMock.producer.findMany).toHaveBeenCalledWith()

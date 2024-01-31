@@ -4,4 +4,4 @@
 - Refactor in create and update repositories
 - Create a validation class to validade a sum of arable area and vegetation and refatorin a create (lines 10 - 17) and update (lines 11 - 18) controllers
 - Implements a helpers to validate http returns like NestJS ExceptionFilters
-- Refactor in files where there is no catch errors treatment
+- Refactor files where there is no catch error handling - ok!

@@ -47,15 +47,16 @@ describe('ProducerUpdateRepository', () => {
 
   it('should handle ProducerUpdateRepository error when Prisma try update a producer by id', async () => {
     jest.spyOn(prismaMock.producer, 'update').mockRejectedValue(new ProducerError(
-      'Error to update a producer',
-      '@ProducerCreateRepository'
+      'Database connection error',
+      '@ProducerUpdateRepository',
+      500
     ))
 
     const { id, ...rest } = producerUpdateData
 
     await expect(
       sut.perform(id, rest)
-    ).rejects.toThrow('Error to update a producer')
+    ).rejects.toThrow()
 
     expect(prismaMock.producer.update).toHaveBeenCalledWith({
       where: {

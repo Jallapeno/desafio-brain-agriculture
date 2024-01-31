@@ -1,4 +1,5 @@
 import { DashboardRepository } from '@/data/contracts/repositories'
+import { ProducerError } from '@/domain/errors'
 import { PrismaClient } from '@prisma/client'
 
 describe('DashboardRepository', () => {
@@ -59,5 +60,23 @@ describe('DashboardRepository', () => {
     expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
     expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
     expect(result).toEqual(dashboard)
+  })
+
+  it('should handle DashboardRepository error when Prisma try list producers data', async () => {
+    // Mock to simulate an error when calling Prisma's create method
+    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerError(
+      'Database connection error',
+      '@DashboardRepository',
+      500
+    ))
+
+    // Expect the call to perform to result in an error
+    await expect(
+      sut.perform()
+    ).rejects.toThrow()
+
+    // Check if Prisma's create method was called correctly
+    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
+    expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
   })
 })
