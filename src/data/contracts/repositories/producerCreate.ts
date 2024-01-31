@@ -1,30 +1,20 @@
+import { ConectionError } from '@/domain/errors'
 import { type ProducerCreate } from '@/domain/features'
-import { type PrismaClient } from '@prisma/client'
+import { type PrismaService as DbService } from '@/infra'
 
 export class ProducerCreateRepository {
-  constructor (
-    private readonly prisma: PrismaClient
-  ) {}
+  private readonly dbService: DbService
+
+  constructor (dbService: DbService) {
+    this.dbService = dbService
+  }
 
   async perform (params: ProducerCreate.Params): Promise<ProducerCreate.Result> {
     try {
-      const result = await this.prisma.producer.create({
-        data: {
-          cpfCnpj: params.cpfCnpj,
-          name: params.name,
-          farmName: params.farmName,
-          city: params.city,
-          state: params.state,
-          totalArea: params.totalArea,
-          arableArea: params.arableArea,
-          vegetationArea: params.vegetationArea,
-          crops: params.crops
-        }
-      })
-
+      const result = await this.dbService.createProducer(params)
       return result
-    } finally {
-      await this.prisma.$disconnect()
+    } catch (error) {
+      throw new ConectionError('Error to create new producer', '@ProducerCreateRepository', 500)
     }
   }
 }

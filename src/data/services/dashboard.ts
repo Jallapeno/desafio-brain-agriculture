@@ -1,4 +1,5 @@
 import { type DashboardRepository } from '@/data/contracts/repositories'
+import { DashboardError } from '@/domain/errors'
 import { type Dashboard } from '@/domain/features'
 
 export class DashboardService {
@@ -8,9 +9,7 @@ export class DashboardService {
     try {
       return await this.dashboardRepository.perform()
     } catch (error) {
-      console.log(error)
-
-      throw new Error()
+      throw new DashboardError()
     }
   }
 }

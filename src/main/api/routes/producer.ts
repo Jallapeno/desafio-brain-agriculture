@@ -1,51 +1,26 @@
 import { Router } from 'express'
-import { PrismaClient } from '@prisma/client'
 import {
-  DashboardRepository,
-  ProducerCreateRepository,
-  ProducerListOnceRepository,
-  ProducerListRepository,
-  ProducerUpdateRepository
-} from '@/data/contracts/repositories'
-import {
-  DashboardService,
-  ProducerCreateService,
-  ProducerListOnceService,
-  ProducerListService,
-  ProducerUpdateService
-} from '@/data/services'
-import {
-  DashboardController,
-  ProducerCreateController,
-  ProducerListCrontroller,
-  ProducerListOnceController,
-  ProducerUpdateController
-} from '@/application/controllers'
+  DashboardFactory,
+  ProducerCreateFactory,
+  ProducerListFactory,
+  ProducerListOnceFactory,
+  ProducerUpdateFactory
+} from '@/data/factories'
+
+const dashboardFactory = new DashboardFactory()
+const producerCreateFactory = new ProducerCreateFactory()
+const producerListOnceFactory = new ProducerListOnceFactory()
+const producerUpdateFactory = new ProducerUpdateFactory()
+const producerListFactory = new ProducerListFactory()
 
 export const producerRouter = Router()
-const prisma = new PrismaClient()
 // dashboard
-const dashboardRepository = new DashboardRepository(prisma)
-const dashboardService = new DashboardService(dashboardRepository)
-const dashboardController = new DashboardController(dashboardService)
-producerRouter.get('/producer/dashboard', async (req, res) => dashboardController.handle(req, res))
+producerRouter.get('/producer/dashboard', async (req, res) => dashboardFactory.make(req, res))
 // producer create
-const producerCreateRepository = new ProducerCreateRepository(prisma)
-const producerCreateService = new ProducerCreateService(producerCreateRepository)
-const producerCreateController = new ProducerCreateController(producerCreateService)
-producerRouter.post('/producer', async (req, res) => producerCreateController.handle(req, res))
+producerRouter.post('/producer', async (req, res) => producerCreateFactory.make(req, res))
 // producer Update
-const producerUpdateRepository = new ProducerUpdateRepository(prisma)
-const producerUpdateService = new ProducerUpdateService(producerUpdateRepository)
-const producerUpdateController = new ProducerUpdateController(producerUpdateService)
-producerRouter.put('/producer/:id', async (req, res) => producerUpdateController.handle(req, res))
+producerRouter.put('/producer/:id', async (req, res) => producerUpdateFactory.make(req, res))
 // producer list all
-const producerListRepository = new ProducerListRepository(prisma)
-const producerListService = new ProducerListService(producerListRepository)
-const producerListController = new ProducerListCrontroller(producerListService)
-producerRouter.get('/producer', async (req, res) => producerListController.handle(req, res))
+producerRouter.get('/producer', async (req, res) => producerListFactory.make(req, res))
 // producer list by id
-const producerListOnceRepository = new ProducerListOnceRepository(prisma)
-const producerListOnceService = new ProducerListOnceService(producerListOnceRepository)
-const producerListOnceController = new ProducerListOnceController(producerListOnceService)
-producerRouter.get('/producer/:id', async (req, res) => producerListOnceController.handle(req, res))
+producerRouter.get('/producer/:id', async (req, res) => producerListOnceFactory.make(req, res))

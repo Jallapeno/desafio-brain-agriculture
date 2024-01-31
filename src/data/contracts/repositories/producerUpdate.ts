@@ -1,17 +1,20 @@
+import { ProducerError } from '@/domain/errors'
 import { type ProducerUpdate } from '@/domain/features'
-import { type PrismaClient } from '@prisma/client'
+import { type PrismaService as DbService } from '@/infra'
 
 export class ProducerUpdateRepository {
-  constructor (
-    private readonly prisma: PrismaClient
-  ) {}
+  private readonly dbService: DbService
+
+  constructor (dbService: DbService) {
+    this.dbService = dbService
+  }
 
   async perform (id: number, params: ProducerUpdate.Params): Promise<ProducerUpdate.Result> {
     try {
-      const result = await this.prisma.producer.update({ where: { id }, data: params })
+      const result = await this.dbService.updateProducerById(id, params)
       return result
-    } finally {
-      await this.prisma.$disconnect()
+    } catch (error) {
+      throw new ProducerError('Database connection error', '@ProducerUpdateRepository', 500)
     }
   }
 }
