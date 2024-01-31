@@ -1,5 +1,5 @@
 - Apply factories method to routes to reduce complexity - ok!
-- Uncouple Prisma of repositories moving to a own class
+- Uncouple Prisma of repositories moving to a own class - ok!
 - Remove Prisma instance and Create a fakeDbProvider into tests files
 - Refactor in create and update repositories
 - Create a validation class to validade a sum of arable area and vegetation and refatorin a create (lines 10 - 17) and update (lines 11 - 18) controllers
