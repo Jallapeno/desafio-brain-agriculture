@@ -1,6 +1,6 @@
 - Apply factories method to routes to reduce complexity - ok!
 - Uncouple Prisma of repositories moving to a own class - ok!
-- Remove Prisma instance and Create a fakeDbProvider into tests files
+- Remove the Prisma instance and create a fakeDbProvider in the test files - not ok, but an infra/prisma strategy was created to isolate Prisma calls
 - Create a validation class to validade a sum of arable area and vegetation and refatorin a create (lines 10 - 17) and update (lines 11 - 18) controllers
 - Implements a helpers to validate http returns like NestJS ExceptionFilters
 - Refactor files where there is no catch error handling - ok!
