@@ -42,7 +42,7 @@ export class DashboardRepository {
       }
       return result
     } catch (error) {
-      throw new DashboardError('Database connection error', '@DashboardRepository', 500)
+      throw new DashboardError()
     } finally {
       await this.prisma.$disconnect()
     }

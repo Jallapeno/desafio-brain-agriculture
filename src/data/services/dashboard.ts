@@ -9,7 +9,7 @@ export class DashboardService {
     try {
       return await this.dashboardRepository.perform()
     } catch (error) {
-      throw new DashboardError('Error to list dashboard data', '@DashboardService', 400)
+      throw new DashboardError()
     }
   }
 }
