@@ -1,0 +1,211 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2024-01-31T04:42:11.539Z",
+  "__export_source": "insomnia.desktop.app:v8.6.0",
+  "resources": [
+    {
+      "_id": "req_5bfbf06ee1cd402097fcb8f8aea65843",
+      "parentId": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "modified": 1705372477794,
+      "created": 1705330903660,
+      "url": "http://localhost:3000/api/producer/dashboard",
+      "name": "Dashboard",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1705330903660,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "parentId": "wrk_scratchpad",
+      "modified": 1705062295344,
+      "created": 1705062280535,
+      "name": "brain-agriculture",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1705062280685,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_scratchpad",
+      "parentId": null,
+      "modified": 1699885001517,
+      "created": 1699885001517,
+      "name": "Scratch Pad",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_15b6ac681ae644a8a63bf6aa5ebb9854",
+      "parentId": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "modified": 1705543389632,
+      "created": 1705326341088,
+      "url": "http://localhost:3000/api/producer/32",
+      "name": "List producer By id",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1705326341088,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_9048a6bca77a41a69f00cbde8c11860b",
+      "parentId": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "modified": 1705326339067,
+      "created": 1705324458174,
+      "url": "http://localhost:3000/api/producer",
+      "name": "List all producers",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1705324458174,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_962bd11468234e0da92c3aa31fe77ac7",
+      "parentId": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "modified": 1705541838892,
+      "created": 1704981046084,
+      "url": "http://localhost:3000/api/producer",
+      "name": "Create new producer",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"cpfCnpj\": \"76628370330\",\n    \"name\": \"Priscilla\",\n    \"farmName\": \"stardew valley\",\n    \"city\": \"brasilia\",\n    \"state\": \"df\",\n    \"totalArea\": 2000,\n    \"arableArea\": 500,\n    \"vegetationArea\": 700,\n    \"crops\": [\"milho\", \"soja\", \"trigo\"]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1705062298777,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_c1d19225cc2543f19c354d6dcf4b07af",
+      "parentId": "fld_1ace913941bc418eaf0df4c9999ecc3d",
+      "modified": 1706675194227,
+      "created": 1705062330549,
+      "url": "http://localhost:3000/api/producer/32",
+      "name": "Update a producer",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"cpfCnpj\": \"06908398129\",\n\t\"name\": \"Priscilla teste\",\n\t\"farmName\": \"stardew valley\",\n\t\"city\": \"brasilia\",\n\t\"state\": \"df\",\n\t\"totalArea\": 2000,\n\t\"arableArea\": 500,\n\t\"vegetationArea\": 700,\n\t\"crops\": [\n\t\t\"milho\",\n\t\t\"soja\",\n\t\t\"trigo\"\n\t]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "User-Agent",
+          "value": "insomnia/8.5.1"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704741985581.5,
+      "isPrivate": false,
+      "pathParameters": [],
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_99d30891da4bdcebc63947a8fc17f076de878684",
+      "parentId": "wrk_scratchpad",
+      "modified": 1703604272370,
+      "created": 1703604272370,
+      "name": "Base Environment",
+      "data": {},
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1703604272370,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_99d30891da4bdcebc63947a8fc17f076de878684",
+      "parentId": "wrk_scratchpad",
+      "modified": 1703604272372,
+      "created": 1703604272372,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    }
+  ]
+}
