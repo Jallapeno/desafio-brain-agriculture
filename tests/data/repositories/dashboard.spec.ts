@@ -1,5 +1,5 @@
 import { DashboardRepository } from '@/data/contracts/repositories'
-import { ProducerError } from '@/domain/errors'
+import { DashboardError } from '@/domain/errors'
 import { PrismaService as DbService } from '@/infra'
 
 describe('DashboardRepository', () => {
@@ -65,11 +65,7 @@ describe('DashboardRepository', () => {
 
   it('should handle DashboardRepository error when DbService try list producers data', async () => {
     // Mock to simulate an error when calling DbService's create method
-    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new ProducerError(
-      'Database connection error',
-      '@DashboardRepository',
-      500
-    ))
+    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new DashboardError())
 
     // Expect the call to perform to result in an error
     await expect(

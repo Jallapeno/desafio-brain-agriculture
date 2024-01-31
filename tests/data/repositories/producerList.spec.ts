@@ -1,4 +1,4 @@
-import { ProducerError } from '@/domain/errors'
+import { ProducerListError } from '@/domain/errors'
 import { ProducerListRepository } from '@/data/contracts/repositories'
 import { PrismaService as DbService } from '@/infra'
 
@@ -40,11 +40,7 @@ describe('ProducerListRepository', () => {
 
   it('should handle ProducerListRepository error when DbService try list all producers', async () => {
     // Mock to simulate an error when calling DbService's findMany method
-    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new ProducerError(
-      'Database connection error',
-      '@ProducerListRepository',
-      500
-    ))
+    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new ProducerListError())
 
     // Expect the call to perform to result in an error
     await expect(

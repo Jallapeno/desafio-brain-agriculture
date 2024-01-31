@@ -1,4 +1,3 @@
-import { type Producer } from '@prisma/client'
 import { type ProducerListOnceError } from '@/domain/errors'
 
 export interface ProducerListOnce {
@@ -10,5 +9,16 @@ export namespace ProducerListOnce {
     id: number
   }
 
-  export type Result = Producer | ProducerListOnceError
+  export type Result = {
+    id: number
+    cpfCnpj: string
+    name: string
+    farmName: string
+    city: string
+    state: string
+    totalArea: number
+    arableArea: number
+    vegetationArea: number
+    crops: string[]
+  } | ProducerListOnceError
 }
