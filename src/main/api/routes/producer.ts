@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { PrismaClient } from '@prisma/client'
 import {
   DashboardFactory,
   ProducerCreateFactory,
@@ -15,14 +14,13 @@ const producerUpdateFactory = new ProducerUpdateFactory()
 const producerListFactory = new ProducerListFactory()
 
 export const producerRouter = Router()
-const prisma = new PrismaClient()
 // dashboard
-producerRouter.get('/producer/dashboard', async (req, res) => dashboardFactory.make(req, res, prisma))
+producerRouter.get('/producer/dashboard', async (req, res) => dashboardFactory.make(req, res))
 // producer create
-producerRouter.post('/producer', async (req, res) => producerCreateFactory.make(req, res, prisma))
+producerRouter.post('/producer', async (req, res) => producerCreateFactory.make(req, res))
 // producer Update
-producerRouter.put('/producer/:id', async (req, res) => producerUpdateFactory.make(req, res, prisma))
+producerRouter.put('/producer/:id', async (req, res) => producerUpdateFactory.make(req, res))
 // producer list all
-producerRouter.get('/producer', async (req, res) => producerListFactory.make(req, res, prisma))
+producerRouter.get('/producer', async (req, res) => producerListFactory.make(req, res))
 // producer list by id
-producerRouter.get('/producer/:id', async (req, res) => producerListOnceFactory.make(req, res, prisma))
+producerRouter.get('/producer/:id', async (req, res) => producerListOnceFactory.make(req, res))

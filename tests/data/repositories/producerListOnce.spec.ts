@@ -1,10 +1,11 @@
 import { ProducerError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerListOnceRepository } from '@/data/contracts/repositories'
+import { PrismaService as DbService } from '@/infra'
 
 describe('ProducerListOnceRepository', () => {
   let sut: ProducerListOnceRepository
-  let prismaMock: PrismaClient
+  let dbService: DbService
+
   const producerData = {
     id: 1,
     cpfCnpj: 'any_cpf',
@@ -19,32 +20,28 @@ describe('ProducerListOnceRepository', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerListOnceRepository(prismaMock)
+    dbService = new DbService()
+    sut = new ProducerListOnceRepository(dbService)
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerListOnceRepository when Prisma returns data', async () => {
-    jest.spyOn(prismaMock.producer, 'findUnique').mockResolvedValue(producerData)
+  it('should call ProducerListOnceRepository when DbService returns data', async () => {
+    jest.spyOn(dbService, 'listById').mockResolvedValue(producerData)
 
     const result = await sut.perform(1)
 
-    // Check if Prisma's findUnique method was called correctly
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })
+    // Check if DbService's findUnique method was called correctly
+    expect(dbService.listById).toHaveBeenCalledWith(1)
 
     // checks if the findUnique function is called only once
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledTimes(1)
+    expect(dbService.listById).toHaveBeenCalledTimes(1)
 
     // Check whether the repository result is as expected
     expect(result).toEqual(producerData)
   })
 
-  it('Should handle ProducerListOnceRepository error when Prisma try list a producer by id', async () => {
-    // Mock to simulate an error when calling Prisma's findUnique method
-    jest.spyOn(prismaMock.producer, 'findUnique').mockRejectedValue(new ProducerError(
+  it('Should handle ProducerListOnceRepository error when DbService try list a producer by id', async () => {
+    // Mock to simulate an error when calling DbService's findUnique method
+    jest.spyOn(dbService, 'listById').mockRejectedValue(new ProducerError(
       'Database connection error',
       '@ProducerListOnceRepository',
       500
@@ -52,10 +49,10 @@ describe('ProducerListOnceRepository', () => {
 
     // Expect the call to perform to result in an error
     await expect(
-      prismaMock.producer.findUnique({ where: { id: 1 } })
+      dbService.listById(1)
     ).rejects.toThrow()
 
-    // Check if Prisma's findUnique method was called correctly
-    expect(prismaMock.producer.findUnique).toHaveBeenCalledWith({ where: { id: 1 } })
+    // Check if DbService's findUnique method was called correctly
+    expect(dbService.listById).toHaveBeenCalledWith(1)
   })
 })

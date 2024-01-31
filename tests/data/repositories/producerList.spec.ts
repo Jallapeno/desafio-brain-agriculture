@@ -1,10 +1,10 @@
 import { ProducerError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerListRepository } from '@/data/contracts/repositories'
+import { PrismaService as DbService } from '@/infra'
 
 describe('ProducerListRepository', () => {
   let sut: ProducerListRepository
-  let prismaMock: PrismaClient
+  let dbService: DbService
 
   const producerData = {
     id: 1,
@@ -20,31 +20,27 @@ describe('ProducerListRepository', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerListRepository(prismaMock)
+    dbService = new DbService()
+    sut = new ProducerListRepository(dbService)
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerListRepository to list all producers when Prisma returns data', async () => {
-    jest.spyOn(prismaMock.producer, 'findMany').mockResolvedValue([producerData])
+  it('should call ProducerListRepository to list all producers when DbService returns data', async () => {
+    jest.spyOn(dbService, 'getAllProducers').mockResolvedValue([producerData])
 
     const result = await sut.perform()
-    // Check if Prisma's findMany method was called correctly
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
+    // Check if DbService's findMany method was called correctly
+    expect(dbService.getAllProducers).toHaveBeenCalledWith()
 
     // checks if the findMany function is called only once
-    expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
+    expect(dbService.getAllProducers).toHaveBeenCalledTimes(1)
 
     // Check whether the repository result is as expected
     expect(result).toEqual([producerData])
   })
 
-  it('should handle ProducerListRepository error when Prisma try list all producers', async () => {
-    // Mock to simulate an error when calling Prisma's findMany method
-    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerError(
+  it('should handle ProducerListRepository error when DbService try list all producers', async () => {
+    // Mock to simulate an error when calling DbService's findMany method
+    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new ProducerError(
       'Database connection error',
       '@ProducerListRepository',
       500
@@ -55,7 +51,7 @@ describe('ProducerListRepository', () => {
       sut.perform()
     ).rejects.toThrow()
 
-    // Check if Prisma's findMany method was called correctly
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
+    // Check if DbService's findMany method was called correctly
+    expect(dbService.getAllProducers).toHaveBeenCalledWith()
   })
 })

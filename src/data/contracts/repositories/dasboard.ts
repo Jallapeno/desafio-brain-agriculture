@@ -1,25 +1,27 @@
-import { type PrismaClient } from '@prisma/client'
-import { DashboardError } from '@/domain/errors'
+import { ConectionError } from '@/domain/errors'
 import { type Dashboard } from '@/domain/features'
+import { type PrismaService as DbService } from '@/infra'
 
 export class DashboardRepository {
-  constructor (
-    private readonly prisma: PrismaClient
-  ) {}
+  private readonly dbService: DbService
+
+  constructor (dbService: DbService) {
+    this.dbService = dbService
+  }
 
   async perform (): Promise<Dashboard.Result> {
     try {
-      const producers = await this.prisma.producer.findMany()
+      const producers = await this.dbService.getAllProducers()
       const totalArea = producers ? producers.reduce((acc, farm) => acc + farm.totalArea, 0) : 0
       const totalFarms = producers ? producers.length : 0
       // Data for pie chart by state
-      const farmsByState = producers.reduce((acc: any, farm) => {
+      const farmsByState = producers?.reduce((acc: any, farm) => {
         acc[farm.state] = (acc[farm.state] || 0) + 1
         return acc
       }, {})
 
       // Data for pie chart by culture
-      const farmsByCulture = producers.reduce((acc: any, farm) => {
+      const farmsByCulture = producers?.reduce((acc: any, farm) => {
         farm.crops.forEach(culture => {
           acc[culture] = (acc[culture] || 0) + 1
         })
@@ -27,7 +29,7 @@ export class DashboardRepository {
       }, {})
 
       // Data for pie chart by land use
-      const agriculturalAndVegetationArea = producers.reduce((acc, farm) => {
+      const agriculturalAndVegetationArea = producers?.reduce((acc, farm) => {
         acc.agriculturable += farm.arableArea
         acc.vegetation += farm.vegetationArea
         return acc
@@ -42,9 +44,7 @@ export class DashboardRepository {
       }
       return result
     } catch (error) {
-      throw new DashboardError()
-    } finally {
-      await this.prisma.$disconnect()
+      throw new ConectionError('Error to list dashboard data', '@DashboardRepository', 500)
     }
   }
 }

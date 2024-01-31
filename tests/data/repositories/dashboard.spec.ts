@@ -1,10 +1,11 @@
 import { DashboardRepository } from '@/data/contracts/repositories'
 import { ProducerError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
+import { PrismaService as DbService } from '@/infra'
 
 describe('DashboardRepository', () => {
   let sut: DashboardRepository
-  let prismaMock: PrismaClient
+  let dbService: DbService
+
   const dashboard = {
     totalArea: 3000,
     totalFarms: 2,
@@ -46,25 +47,25 @@ describe('DashboardRepository', () => {
     crops: ['any_crop', 'any_crop2', 'any_crop3']
   }]
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new DashboardRepository(prismaMock)
+    dbService = new DbService()
+    sut = new DashboardRepository(dbService)
   })
 
   afterEach(async () => {
-    await prismaMock.$disconnect()
+    await dbService.disconnect()
   })
-  it('should call DashboardRepository to list totalArea and totalFarms when Prisma returns data', async () => {
-    jest.spyOn(prismaMock.producer, 'findMany').mockResolvedValue(producerData)
+  it('should call DashboardRepository to list totalArea and totalFarms when DbService returns data', async () => {
+    jest.spyOn(dbService, 'getAllProducers').mockResolvedValue(producerData)
 
     const result = await sut.perform()
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
-    expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
+    expect(dbService.getAllProducers).toHaveBeenCalledWith()
+    expect(dbService.getAllProducers).toHaveBeenCalledTimes(1)
     expect(result).toEqual(dashboard)
   })
 
-  it('should handle DashboardRepository error when Prisma try list producers data', async () => {
-    // Mock to simulate an error when calling Prisma's create method
-    jest.spyOn(prismaMock.producer, 'findMany').mockRejectedValue(new ProducerError(
+  it('should handle DashboardRepository error when DbService try list producers data', async () => {
+    // Mock to simulate an error when calling DbService's create method
+    jest.spyOn(dbService, 'getAllProducers').mockRejectedValue(new ProducerError(
       'Database connection error',
       '@DashboardRepository',
       500
@@ -75,8 +76,8 @@ describe('DashboardRepository', () => {
       sut.perform()
     ).rejects.toThrow()
 
-    // Check if Prisma's create method was called correctly
-    expect(prismaMock.producer.findMany).toHaveBeenCalledWith()
-    expect(prismaMock.producer.findMany).toHaveBeenCalledTimes(1)
+    // Check if DbService's create method was called correctly
+    expect(dbService.getAllProducers).toHaveBeenCalledWith()
+    expect(dbService.getAllProducers).toHaveBeenCalledTimes(1)
   })
 })

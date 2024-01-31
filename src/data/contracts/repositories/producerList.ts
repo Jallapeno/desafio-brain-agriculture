@@ -1,20 +1,20 @@
-import { ProducerError } from '@/domain/errors'
+import { ConectionError } from '@/domain/errors'
 import { type ProducerList } from '@/domain/features'
-import { type PrismaClient } from '@prisma/client'
+import { type PrismaService as DbService } from '@/infra'
 
 export class ProducerListRepository {
-  constructor (
-    private readonly prisma: PrismaClient
-  ) {}
+  private readonly dbService: DbService
+
+  constructor (dbService: DbService) {
+    this.dbService = dbService
+  }
 
   async perform (): Promise<ProducerList.Result[] | null> {
     try {
-      const result = await this.prisma.producer.findMany()
+      const result = await this.dbService.getAllProducers()
       return result
     } catch (error) {
-      throw new ProducerError('Database connection error', '@ProducerListRepository', 500)
-    } finally {
-      await this.prisma.$disconnect()
+      throw new ConectionError('Error to list all producers', '@ProducerListRepository', 500)
     }
   }
 }

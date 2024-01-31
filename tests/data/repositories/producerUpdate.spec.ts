@@ -1,10 +1,11 @@
 import { ProducerError } from '@/domain/errors'
-import { PrismaClient } from '@prisma/client'
 import { ProducerUpdateRepository } from '@/data/contracts/repositories'
+import { PrismaService as DbService } from '@/infra'
 
 describe('ProducerUpdateRepository', () => {
   let sut: ProducerUpdateRepository
-  let prismaMock: PrismaClient
+  let dbService: DbService
+
   const producerUpdateData = {
     id: 1,
     cpfCnpj: 'any_cpf',
@@ -19,34 +20,25 @@ describe('ProducerUpdateRepository', () => {
   }
 
   beforeEach(() => {
-    prismaMock = new PrismaClient()
-    sut = new ProducerUpdateRepository(prismaMock)
+    dbService = new DbService()
+    sut = new ProducerUpdateRepository(dbService)
   })
 
-  afterEach(async () => {
-    await prismaMock.$disconnect()
-  })
-
-  it('should call ProducerUpdateRepository with corrects params to Prisma update a producer in the database', async () => {
-    jest.spyOn(prismaMock.producer, 'update').mockResolvedValue(producerUpdateData)
+  it('should call ProducerUpdateRepository with corrects params to DbService update a producer in the database', async () => {
+    jest.spyOn(dbService, 'updateProducerById').mockResolvedValue(producerUpdateData)
 
     const { id, ...rest } = producerUpdateData
     const result = await sut.perform(id, rest)
 
-    expect(prismaMock.producer.update).toHaveBeenCalledWith({
-      where: {
-        id
-      },
-      data: rest
-    })
+    expect(dbService.updateProducerById).toHaveBeenCalledWith(id, rest)
 
-    expect(prismaMock.producer.update).toHaveBeenCalledTimes(1)
+    expect(dbService.updateProducerById).toHaveBeenCalledTimes(1)
 
     expect(result).toEqual(producerUpdateData)
   })
 
-  it('should handle ProducerUpdateRepository error when Prisma try update a producer by id', async () => {
-    jest.spyOn(prismaMock.producer, 'update').mockRejectedValue(new ProducerError(
+  it('should handle ProducerUpdateRepository error when DbService try update a producer by id', async () => {
+    jest.spyOn(dbService, 'updateProducerById').mockRejectedValue(new ProducerError(
       'Database connection error',
       '@ProducerUpdateRepository',
       500
@@ -58,11 +50,6 @@ describe('ProducerUpdateRepository', () => {
       sut.perform(id, rest)
     ).rejects.toThrow()
 
-    expect(prismaMock.producer.update).toHaveBeenCalledWith({
-      where: {
-        id
-      },
-      data: rest
-    })
+    expect(dbService.updateProducerById).toHaveBeenCalledWith(id, rest)
   })
 })
