@@ -1,4 +1,4 @@
-- Apply factories method to routes to reduce complexity
+- Apply factories method to routes to reduce complexity - ok!
 - Uncouple Prisma of repositories moving to a own class
 - Remove Prisma instance and Create a fakeDbProvider into tests files
 - Refactor in create and update repositories

@@ -6,7 +6,19 @@ describe('DashboardRepository', () => {
   let prismaMock: PrismaClient
   const dashboard = {
     totalArea: 3000,
-    totalFarms: 2
+    totalFarms: 2,
+    agriculturalAndVegetationArea: {
+      agriculturable: 200,
+      vegetation: 200
+    },
+    farmsByCulture: {
+      any_crop: 2,
+      any_crop2: 2,
+      any_crop3: 2
+    },
+    farmsByState: {
+      any_state: 2
+    }
   }
   const producerData = [{
     id: 1,
