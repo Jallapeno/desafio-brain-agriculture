@@ -1,4 +1,4 @@
-import { ProducerError } from '@/domain/errors'
+import { ProducerListOnceError } from '@/domain/errors'
 import { ProducerListOnceRepository } from '@/data/contracts/repositories'
 import { PrismaService as DbService } from '@/infra'
 
@@ -41,11 +41,7 @@ describe('ProducerListOnceRepository', () => {
 
   it('Should handle ProducerListOnceRepository error when DbService try list a producer by id', async () => {
     // Mock to simulate an error when calling DbService's findUnique method
-    jest.spyOn(dbService, 'listById').mockRejectedValue(new ProducerError(
-      'Database connection error',
-      '@ProducerListOnceRepository',
-      500
-    ))
+    jest.spyOn(dbService, 'listById').mockRejectedValue(new ProducerListOnceError())
 
     // Expect the call to perform to result in an error
     await expect(

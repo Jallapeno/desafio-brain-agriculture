@@ -1,29 +1,43 @@
 export function isValidCNPJ (cnpj: string): boolean {
-  cnpj = cnpj.replace(/[^\d]/g, '')
+  // Remover caracteres não numéricos
+  cnpj = cnpj.replace(/\D/g, '')
 
-  if (cnpj.length !== 14 || /^(.)\1+$/.test(cnpj)) {
+  // Verificar se o CNPJ tem 14 dígitos
+  if (cnpj.length !== 14) {
     return false
   }
 
-  const digits = cnpj.split('').map(digit => parseInt(digit))
-
-  const validateDigit = (digits: number[], length: number): number => {
-    let sum = 0
-    let pos = length - 7
-
-    for (let i = length; i >= 1; i--) {
-      sum += digits[length - i] * pos--
-      if (pos < 2) {
-        pos = 9
-      }
-    }
-
-    const result = sum % 11 < 2 ? 0 : 11 - (sum % 11)
-    return result
+  // Calcular primeiro dígito verificador
+  let sum = 0
+  let factor = 5
+  for (let i = 0; i < 12; i++) {
+    sum += parseInt(cnpj.charAt(i)) * factor
+    factor = factor === 2 ? 9 : factor - 1
   }
 
-  const firstDigit = validateDigit(digits, 12)
-  const secondDigit = validateDigit([...digits, firstDigit], 13)
+  let remainder = sum % 11
+  remainder = remainder < 2 ? 0 : 11 - remainder
 
-  return digits[12] === firstDigit && digits[13] === secondDigit
+  // Verificar primeiro dígito verificador
+  if (parseInt(cnpj.charAt(12)) !== remainder) {
+    return false
+  }
+
+  // Calcular segundo dígito verificador
+  sum = 0
+  factor = 6
+  for (let i = 0; i < 13; i++) {
+    sum += parseInt(cnpj.charAt(i)) * factor
+    factor = factor === 2 ? 9 : factor - 1
+  }
+
+  remainder = sum % 11
+  remainder = remainder < 2 ? 0 : 11 - remainder
+
+  // Verificar segundo dígito verificador
+  if (parseInt(cnpj.charAt(13)) !== remainder) {
+    return false
+  }
+
+  return true
 }

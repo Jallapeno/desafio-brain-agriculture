@@ -1,6 +1,6 @@
 import { type Request, type Response } from 'express'
 import { type ProducerUpdateService } from '@/data/services'
-import { isValidCpfCnpj } from '@/utils/validators'
+import { validateArea, validateCpfCnpj } from '@/utils/validators/validations'
 
 export class ProducerUpdateController {
   constructor (private readonly producerUpdateService: ProducerUpdateService) {}
@@ -8,12 +8,9 @@ export class ProducerUpdateController {
   async handle (req: Request, res: Response): Promise<void> {
     const { body, params } = req
     const idToNumber = parseInt(params.id)
-    if (body.arableArea + body.vegetationArea > body.totalArea) {
-      res.status(400).json({ error: 'The sum of arable area and vegetation must not be greater than the total area of the farm' })
-      return
-    }
-    if (!isValidCpfCnpj(body.cpfCnpj)) {
-      res.status(400).json({ error: 'Invalid CPF or CNPJ' })
+    const isAreaValid = validateArea(req, res)
+    const isCpfCnpjValid = validateCpfCnpj(req, res)
+    if (!isAreaValid || !isCpfCnpjValid) {
       return
     }
     try {

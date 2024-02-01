@@ -15,12 +15,42 @@ const producerListFactory = new ProducerListFactory()
 
 export const producerRouter = Router()
 // dashboard
-producerRouter.get('/producer/dashboard', async (req, res) => dashboardFactory.make(req, res))
+producerRouter.get('/producer/dashboard', async (req, res, next) => {
+  try {
+    await dashboardFactory.make(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 // producer create
-producerRouter.post('/producer', async (req, res) => producerCreateFactory.make(req, res))
+producerRouter.post('/producer', async (req, res, next) => {
+  try {
+    await producerCreateFactory.make(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 // producer Update
-producerRouter.put('/producer/:id', async (req, res) => producerUpdateFactory.make(req, res))
+producerRouter.put('/producer/:id', async (req, res, next) => {
+  try {
+    await producerUpdateFactory.make(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 // producer list all
-producerRouter.get('/producer', async (req, res) => producerListFactory.make(req, res))
+producerRouter.get('/producer', async (req, res, next) => {
+  try {
+    await producerListFactory.make(req, res)
+  } catch (error) {
+    next(error)
+  }
+})
 // producer list by id
-producerRouter.get('/producer/:id', async (req, res) => producerListOnceFactory.make(req, res))
+producerRouter.get('/producer/:id', async (req, res, next) => {
+  try {
+    await producerListOnceFactory.make(req, res)
+  } catch (error) {
+    next(error)
+  }
+})

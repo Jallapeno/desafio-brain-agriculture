@@ -1,4 +1,4 @@
-import { ConectionError } from '@/domain/errors'
+import { ProducerCreateError } from '@/domain/errors'
 import { type ProducerCreate } from '@/domain/features'
 import { type PrismaService as DbService } from '@/infra'
 
@@ -14,7 +14,7 @@ export class ProducerCreateRepository {
       const result = await this.dbService.createProducer(params)
       return result
     } catch (error) {
-      throw new ConectionError('Error to create new producer', '@ProducerCreateRepository', 500)
+      throw new ProducerCreateError()
     }
   }
 }

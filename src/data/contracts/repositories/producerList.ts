@@ -1,4 +1,4 @@
-import { ConectionError } from '@/domain/errors'
+import { ProducerListError } from '@/domain/errors'
 import { type ProducerList } from '@/domain/features'
 import { type PrismaService as DbService } from '@/infra'
 
@@ -14,7 +14,7 @@ export class ProducerListRepository {
       const result = await this.dbService.getAllProducers()
       return result
     } catch (error) {
-      throw new ConectionError('Error to list all producers', '@ProducerListRepository', 500)
+      throw new ProducerListError()
     }
   }
 }

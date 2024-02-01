@@ -1,4 +1,4 @@
-import { ProducerError } from '@/domain/errors'
+import { ProducerUpdateError } from '@/domain/errors'
 import { ProducerUpdateRepository } from '@/data/contracts/repositories'
 import { PrismaService as DbService } from '@/infra'
 
@@ -38,11 +38,7 @@ describe('ProducerUpdateRepository', () => {
   })
 
   it('should handle ProducerUpdateRepository error when DbService try update a producer by id', async () => {
-    jest.spyOn(dbService, 'updateProducerById').mockRejectedValue(new ProducerError(
-      'Database connection error',
-      '@ProducerUpdateRepository',
-      500
-    ))
+    jest.spyOn(dbService, 'updateProducerById').mockRejectedValue(new ProducerUpdateError())
 
     const { id, ...rest } = producerUpdateData
 

@@ -1,4 +1,4 @@
-import { ProducerError } from '@/domain/errors'
+import { ProducerCreateError } from '@/domain/errors'
 import { ProducerCreateRepository } from '@/data/contracts/repositories'
 import { PrismaService as DbService } from '@/infra'
 
@@ -41,11 +41,7 @@ describe('ProducerCreateRepository', () => {
 
   it('should handle ProducerCreateRepository error when DbService try create a new producer in DB', async () => {
     // Mock to simulate an error when calling DbService's create method
-    jest.spyOn(dbService, 'createProducer').mockRejectedValue(new ProducerError(
-      'Database connection error',
-      '@ProducerCreateRepository',
-      500
-    ))
+    jest.spyOn(dbService, 'createProducer').mockRejectedValue(new ProducerCreateError())
 
     // Expect the call to perform to result in an error
     await expect(

@@ -1,6 +1,6 @@
-import { ConectionError } from '@/domain/errors'
-import { type ProducerListOnce, type ProducerCreate, type ProducerUpdate } from '@/domain/features'
-import { PrismaClient, type Producer } from '@prisma/client'
+import { ConectionError } from '@/infra/errors'
+import { type ProducerListOnce, type ProducerCreate, type ProducerUpdate, type ProducerList } from '@/domain/features'
+import { PrismaClient } from '@prisma/client'
 
 // Classe de serviço para encapsular as operações do Prisma
 export class PrismaService {
@@ -10,7 +10,7 @@ export class PrismaService {
     this.prisma = new PrismaClient()
   }
 
-  async getAllProducers (): Promise<Producer[] | null> {
+  async getAllProducers (): Promise<ProducerList.Result[]> {
     try {
       const result = await this.prisma.producer.findMany()
       return result
